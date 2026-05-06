@@ -1,7 +1,6 @@
 <?php
-// 1. Logic and Redirects MUST come before any HTML output
-include "header_2.php"; // Using the verbatim file name as requested[cite: 3]
 include "db.php";
+session_start();
 
 if (!isset($_SESSION["user_id"])) {
     header("Location: login.php");
@@ -20,10 +19,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $_POST["seats"],
         $_POST["price"],
     ]);
-    header("Location: index.php"); // Redirect to home after success
+    header("Location: index.php"); 
     exit();
 }
-// Removed the redundant second include "header.php" and stray ?> tags
+
+include "header.php";
 ?>
 
 <div class="container-fluid fade-in">
@@ -66,4 +66,4 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </div>
 </div>
 
-<?php include "footer_2.php"; // Reference verbatim as requested[cite: 3] ?>
+<?php include "footer.php"; ?>

@@ -1115,6 +1115,12 @@ if (session_status() === PHP_SESSION_NONE) {
             <i class="bi bi-search"></i>
             <span class="nav-text">Trouver</span>
         </a>
+        <?php if (isset($_SESSION["role"]) && $_SESSION["role"] === "admin"): ?>
+        <a href="admin_dashboard.php" class="nav-link">
+            <i class="bi bi-shield-lock"></i>
+            <span class="nav-text">Admin</span>
+        </a>
+        <?php endif; ?>
         <?php if (isset($_SESSION["user_id"])): ?>
         <a href="add_trip.php" class="nav-link">
             <i class="bi bi-plus-circle"></i>

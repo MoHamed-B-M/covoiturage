@@ -1,13 +1,20 @@
-<?php include "header.php";
+<?php
 include "db.php";
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $pass = password_hash($_POST["password"], PASSWORD_DEFAULT);
     $stmt = $pdo->prepare(
-        "INSERT INTO Users (name, email, password) VALUES (?, ?, ?)",
+        "INSERT INTO Users (name, email, password, phone) VALUES (?, ?, ?, ?)",
     );
-    $stmt->execute([$_POST["name"], $_POST["email"], $pass]);
+    $stmt->execute([$_POST["name"], $_POST["email"], $pass, $_POST["phone"]]);
     header("Location: login.php");
+    exit();
 }
+
+include "header.php";
 ?>
 <div class="row justify-content-center">
     <div class="col-md-4 apple-card p-5 mt-5">
@@ -15,6 +22,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <form method="POST">
             <input type="text" name="name" class="form-control mb-3" placeholder="Nom complet" required>
             <input type="email" name="email" class="form-control mb-3" placeholder="Adresse email" required>
+            <input type="text" name="phone" class="form-control mb-3" placeholder="Téléphone" required>
             <input type="password" name="password" class="form-control mb-4" placeholder="Mot de passe" required>
             <button class="btn btn-apple w-100 py-2">S'inscrire</button>
         </form>

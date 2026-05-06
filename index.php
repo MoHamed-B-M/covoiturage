@@ -3,7 +3,7 @@ include "header.php";
 include "db.php";
 $trips = $pdo
     ->query(
-        "SELECT T.*, U.id as user_id, U.name, U.phone, U.profile_pic FROM Trips T JOIN Users U ON T.user_id = U.id WHERE T.seats > 0 LIMIT 6",
+        "SELECT T.*, U.id as user_id, U.name, U.phone, U.profile_pic FROM Trips T JOIN Users U ON T.user_id = U.id WHERE T.seats > 0 ORDER BY T.date_trip ASC",
     )
     ->fetchAll();
 ?>
@@ -39,7 +39,7 @@ $trips = $pdo
                         <div class="me-3 position-relative" style="width:48px; height:48px;">
                             <img src="<?= $t["profile_pic"] ?? "" ?>" alt="Profile" class="rounded-3 shadow-sm user-profile-pic <?= $t["profile_pic"] ? "" : "d-none" ?>" style="width:100%; height:100%; object-fit:cover;">
                             <div class="profile-placeholder bg-primary bg-opacity-10 p-2 rounded-3 d-flex align-items-center justify-content-center h-100 w-100 <?= $t["profile_pic"] ? "d-none" : "" ?>">
-                                <i class="bi bi-car-front-fill text-primary fs-4"></i>
+                                <i class="bi bi-person-fill text-primary fs-3"></i>
                             </div>
                         </div>
                         <div>
