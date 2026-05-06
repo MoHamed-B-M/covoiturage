@@ -1,0 +1,86 @@
+:root {
+    --apple-gray: #f5f5f7;
+    --apple-blue: #0071e3;
+    --apple-text: #1d1d1f;
+    --glass: rgba(255, 255, 255, 0.7);
+}
+
+body {
+    background-color: var(--apple-gray);
+    font-family:
+        -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial,
+        sans-serif;
+    color: var(--apple-text);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Glassmorphism Container */
+.container {
+    max-width: 900px;
+    margin-top: 50px;
+}
+
+/* Apple-style Cards */
+.card,
+.list-group-item {
+    background: var(--glass);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 18px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
+    transition:
+        transform 0.3s ease,
+        box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+}
+
+/* Inputs & Forms */
+.form-control {
+    border-radius: 12px;
+    border: 1px solid #d2d2d7;
+    padding: 12px 16px;
+    background: #ffffff;
+    font-size: 16px;
+}
+
+.form-control:focus {
+    border-color: var(--apple-blue);
+    box-shadow: 0 0 0 4px rgba(0, 113, 227, 0.1);
+}
+
+/* Rounded Buttons */
+.btn-primary,
+.btn-success {
+    border-radius: 980px; /* Pill shape */
+    padding: 10px 22px;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    transition: all 0.2s ease;
+}
+
+.btn-primary {
+    background-color: var(--apple-blue);
+    border: none;
+}
+.btn-primary:hover {
+    background-color: #0077ed;
+    opacity: 0.9;
+}
+
+/* Navigation */
+.navbar {
+    background: rgba(255, 255, 255, 0.8) !important;
+    backdrop-filter: saturate(180%) blur(20px);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.navbar-brand {
+    font-weight: 600;
+    color: var(--apple-text) !important;
+}
