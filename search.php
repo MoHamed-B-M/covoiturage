@@ -31,7 +31,9 @@ if (isset($_GET["q"])) {
              data-destination="<?= htmlspecialchars($t["destination"]) ?>"
              data-time="<?= date("H:i", strtotime($t["date_trip"])) ?>"
              data-phone="<?= htmlspecialchars($t["phone"]) ?>"
-             data-profile-pic="<?= $t["profile_pic"] ?>">
+             data-profile-pic="<?= $t["profile_pic"] ?>"
+             data-car="<?= htmlspecialchars($t["car_brand"] ?? "Véhicule non spécifié") ?>"
+             data-offers="<?= htmlspecialchars($t["offers"] ?? "Aucun service additionnel") ?>">
             
             <div class="d-flex align-items-center mb-3">
                 <div class="me-2 position-relative" style="width:32px; height:32px;">

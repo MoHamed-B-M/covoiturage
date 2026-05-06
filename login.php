@@ -12,7 +12,11 @@ if (isset($_SESSION["user_id"])) {
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Admin override
     if ($_POST["email"] === "admin@gmail.com" && $_POST["password"] === "admin") {
-        $_SESSION["user_id"] = "admin";
+        $stmt = $pdo->prepare("SELECT id FROM Users WHERE email = ?");
+        $stmt->execute([$_POST["email"]]);
+        $adminUser = $stmt->fetch();
+        
+        $_SESSION["user_id"] = $adminUser ? $adminUser["id"] : "admin";
         $_SESSION["user_name"] = "Admin";
         $_SESSION["role"] = "admin";
         header("Location: admin_dashboard.php");

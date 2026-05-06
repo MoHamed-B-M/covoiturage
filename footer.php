@@ -48,6 +48,18 @@
                         <div class="fw-bold text-primary"><span id="prevPrice">0</span> TND</div>
                     </div>
                 </div>
+                <div class="col-12">
+                    <div class="p-3 bg-light rounded-4 border dark-border-none" style="background: var(--md3-surface-container-low) !important;">
+                        <div class="small text-muted mb-1">Véhicule</div>
+                        <div class="fw-bold"><i class="bi bi-car-front me-2"></i><span id="prevCar">Véhicule</span></div>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="p-3 bg-light rounded-4 border dark-border-none" style="background: var(--md3-surface-container-low) !important;">
+                        <div class="small text-muted mb-1">Services & Offres</div>
+                        <div class="fw-bold"><i class="bi bi-stars me-2 text-warning"></i><span id="prevOffers">Services</span></div>
+                    </div>
+                </div>
             </div>
 
             <div class="d-grid">
@@ -71,6 +83,8 @@
             const prevDestination = document.getElementById('prevDestination');
             const prevTime = document.getElementById('prevTime');
             const prevPrice = document.getElementById('prevPrice');
+            const prevCar = document.getElementById('prevCar');
+            const prevOffers = document.getElementById('prevOffers');
             const prevBookBtn = document.getElementById('prevBookBtn');
             const prevProfilePic = document.getElementById('prevProfilePic');
             const prevProfileIcon = document.getElementById('prevProfileIcon');
@@ -89,6 +103,8 @@
                     prevDestination.textContent = data.destination;
                     prevTime.textContent = data.time;
                     prevPrice.textContent = data.price;
+                    prevCar.textContent = data.car;
+                    prevOffers.textContent = data.offers;
                     prevBookBtn.href = `book.php?id=${data.tripId}`;
 
                     if (data.profilePic && data.profilePic !== "") {

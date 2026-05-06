@@ -33,7 +33,9 @@ $trips = $pdo
                  data-destination="<?= htmlspecialchars($t["destination"]) ?>"
                  data-time="<?= date("H:i", strtotime($t["date_trip"])) ?>"
                  data-phone="<?= htmlspecialchars($t["phone"]) ?>"
-                 data-profile-pic="<?= $t["profile_pic"] ?>">
+                 data-profile-pic="<?= $t["profile_pic"] ?>"
+                 data-car="<?= htmlspecialchars($t["car_brand"] ?? "Véhicule non spécifié") ?>"
+                 data-offers="<?= htmlspecialchars($t["offers"] ?? "Aucun service additionnel") ?>">
                 <div class="d-flex justify-content-between align-items-start mb-4">
                     <div class="d-flex align-items-center">
                         <div class="me-3 position-relative" style="width:48px; height:48px;">

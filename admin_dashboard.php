@@ -61,6 +61,13 @@ $users = $pdo->query("SELECT * FROM Users WHERE name != 'admin' ORDER BY id DESC
         </div>
     <?php endif; ?>
 
+    <?php if (isset($error)): ?>
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <?= $error ?>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    <?php endif; ?>
+
     <div class="apple-card p-4">
         <h3 class="fw-bold mb-4">Utilisateurs</h3>
         <div class="table-responsive">
@@ -96,37 +103,39 @@ $users = $pdo->query("SELECT * FROM Users WHERE name != 'admin' ORDER BY id DESC
                             </a>
                         </td>
                     </tr>
-
-                    <!-- Edit Modal -->
-                    <div class="modal fade" id="editModal<?= $user["id"] ?>" tabindex="-1" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered">
-                            <div class="modal-content apple-card p-4">
-                                <div class="modal-header border-0 p-0 mb-4">
-                                    <h4 class="modal-title fw-bold">Modifier l'utilisateur</h4>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
-                                <form method="POST">
-                                    <input type="hidden" name="user_id" value="<?= $user["id"] ?>">
-                                    <div class="mb-3">
-                                        <label class="form-label">Nom</label>
-                                        <input type="text" name="name" class="form-control" value="<?= htmlspecialchars($user["name"]) ?>" required>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label class="form-label">Email</label>
-                                        <input type="email" name="email" class="form-control" value="<?= htmlspecialchars($user["email"]) ?>" required>
-                                    </div>
-                                    <div class="d-grid gap-2">
-                                        <button type="submit" name="update_user" class="btn btn-primary py-3">Enregistrer les modifications</button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
                     <?php endforeach; ?>
                 </tbody>
             </table>
         </div>
     </div>
 </div>
+
+<!-- Modals outside the table container -->
+<?php foreach ($users as $user): ?>
+<div class="modal fade" id="editModal<?= $user["id"] ?>" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content apple-card p-4">
+            <div class="modal-header border-0 p-0 mb-4">
+                <h4 class="modal-title fw-bold">Modifier l'utilisateur</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="POST">
+                <input type="hidden" name="user_id" value="<?= $user["id"] ?>">
+                <div class="mb-3">
+                    <label class="form-label">Nom</label>
+                    <input type="text" name="name" class="form-control" value="<?= htmlspecialchars($user["name"]) ?>" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Email</label>
+                    <input type="email" name="email" class="form-control" value="<?= htmlspecialchars($user["email"]) ?>" required>
+                </div>
+                <div class="d-grid gap-2">
+                    <button type="submit" name="update_user" class="btn btn-primary py-3">Enregistrer les modifications</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<?php endforeach; ?>
 
 <?php include "footer.php"; ?>
