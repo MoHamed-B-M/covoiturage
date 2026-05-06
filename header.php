@@ -862,6 +862,182 @@ if (session_status() === PHP_SESSION_NONE) {
             animation: morphicScale 0.6s var(--m3-bounce);
         }
 
+        /* ===== ACCOUNT SECTION ===== */
+        .account-section {
+            padding: 28px 16px;
+            margin: 0 -8px 24px -8px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: var(--m3-radius-2xl);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: all 0.5s var(--m3-bounce);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+        }
+
+        .sidebar.collapsed .account-section {
+            padding: 16px 8px;
+            margin: 0 -4px 24px -4px;
+            background: transparent;
+            border: none;
+            backdrop-filter: none;
+        }
+
+        .profile-pic-wrapper {
+            position: relative;
+            width: 92px;
+            height: 92px;
+            margin-bottom: 16px;
+            cursor: pointer;
+            transition: all 0.5s var(--m3-bounce);
+            padding: 4px;
+            background: linear-gradient(135deg, var(--md3-primary) 0%, #5a7fff 100%);
+            border-radius: 50%;
+        }
+
+        .sidebar.collapsed .profile-pic-wrapper {
+            width: 48px;
+            height: 48px;
+        }
+
+        .profile-pic {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid var(--md3-surface);
+            background: var(--md3-surface-variant);
+            transition: all 0.4s var(--m3-transition);
+        }
+
+        .profile-pic-wrapper:hover .profile-pic {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(45, 109, 246, 0.4);
+        }
+
+        .profile-pic-wrapper::after {
+            content: '\bi-camera-fill';
+            font-family: 'bootstrap-icons';
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.4);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            font-size: 1.5rem;
+        }
+
+        .sidebar.collapsed .profile-pic-wrapper::after {
+            font-size: 1rem;
+        }
+
+        .profile-pic-wrapper:hover::after {
+            opacity: 1;
+        }
+
+        .account-info {
+            text-align: center;
+            transition: opacity 0.3s var(--m3-transition);
+        }
+
+        .sidebar.collapsed .account-info {
+            display: none;
+        }
+
+        .account-name {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--md3-on-surface);
+            margin-bottom: 2px;
+        }
+
+        .account-status {
+            font-size: 0.8rem;
+            color: var(--md3-on-surface-variant);
+            opacity: 0.8;
+        }
+
+        /* Profile Update Animation */
+        @keyframes profileFadeIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .profile-updated {
+            animation: profileFadeIn 0.6s var(--m3-bounce);
+        }
+
+        /* ===== QUICK PREVIEW ===== */
+        .preview-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(12px);
+            z-index: 2000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.4s var(--m3-transition);
+        }
+
+        .preview-overlay.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .preview-content {
+            background: var(--md3-surface);
+            border-radius: var(--m3-radius-2xl);
+            width: 90%;
+            max-width: 450px;
+            padding: 32px;
+            box-shadow: 0 24px 64px rgba(0, 0, 0, 0.4);
+            transform: scale(0.85) translateY(30px);
+            transition: all 0.5s var(--m3-bounce);
+            border: 1px solid var(--md3-outline-variant);
+        }
+
+        .preview-overlay.active .preview-content {
+            transform: scale(1) translateY(0);
+        }
+
+        .preview-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .close-preview {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: none;
+            background: var(--md3-surface-variant);
+            color: var(--md3-on-surface-variant);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s var(--m3-morph);
+        }
+
+        .close-preview:hover {
+            background: var(--md3-error-container);
+            color: var(--md3-error);
+            transform: rotate(90deg);
+        }
+
+        .apple-card[role="button"] {
+            cursor: pointer;
+        }
+
         /* ===== RESPONSIVE ===== */
         @media (max-width: 768px) {
             .sidebar {
@@ -911,6 +1087,25 @@ if (session_status() === PHP_SESSION_NONE) {
         </div>
     </div>
 
+    <?php if (isset($_SESSION["user_id"])): 
+        include_once "db.php";
+        $stmt = $pdo->prepare("SELECT profile_pic FROM Users WHERE id = ?");
+        $stmt->execute([$_SESSION["user_id"]]);
+        $user_data = $stmt->fetch();
+        $profile_pic = $user_data["profile_pic"] ?? "https://ui-avatars.com/api/?name=" . urlencode($_SESSION["user_name"]) . "&background=random&color=fff";
+    ?>
+    <div class="account-section">
+        <div class="profile-pic-wrapper" id="profilePicTrigger">
+            <img src="<?= $profile_pic ?>" alt="Profile" class="profile-pic" id="sidebarProfilePic">
+            <input type="file" id="profilePicInput" hidden accept="image/*">
+        </div>
+        <div class="account-info">
+            <div class="account-name"><?= htmlspecialchars($_SESSION["user_name"]) ?></div>
+            <div class="account-status">Membre Vérifié</div>
+        </div>
+    </div>
+    <?php endif; ?>
+
     <nav class="flex-grow-1">
         <a href="index.php" class="nav-link active">
             <i class="bi bi-grid-1x2"></i>
@@ -920,6 +1115,7 @@ if (session_status() === PHP_SESSION_NONE) {
             <i class="bi bi-search"></i>
             <span class="nav-text">Trouver</span>
         </a>
+        <?php if (isset($_SESSION["user_id"])): ?>
         <a href="add_trip.php" class="nav-link">
             <i class="bi bi-plus-circle"></i>
             <span class="nav-text">Publier</span>
@@ -928,6 +1124,16 @@ if (session_status() === PHP_SESSION_NONE) {
             <i class="bi bi-calendar-check"></i>
             <span class="nav-text">Réservations</span>
         </a>
+        <?php else: ?>
+        <a href="login.php" class="nav-link">
+            <i class="bi bi-box-arrow-in-right"></i>
+            <span class="nav-text">Connexion</span>
+        </a>
+        <a href="register.php" class="nav-link">
+            <i class="bi bi-person-plus"></i>
+            <span class="nav-text">S'inscrire</span>
+        </a>
+        <?php endif; ?>
     </nav>
 
     <div class="mt-auto">
@@ -947,58 +1153,109 @@ if (session_status() === PHP_SESSION_NONE) {
 <div class="main-content">
 
 <script>
-    // Load theme preference from localStorage on page load
     document.addEventListener('DOMContentLoaded', function() {
-        const savedTheme = localStorage.getItem('theme_preference') || 'dark';
+        // --- Theme Logic ---
         const htmlElement = document.documentElement;
         const themeToggle = document.getElementById('themeToggle');
-        const themeIcon = themeToggle.querySelector('i');
-        const themeText = themeToggle.querySelector('.nav-text');
+        const themeIcon = themeToggle ? themeToggle.querySelector('i') : null;
+        const themeText = themeToggle ? themeToggle.querySelector('.nav-text') : null;
 
-        // Apply saved theme
+        const updateThemeUI = (theme) => {
+            if (theme === 'light') {
+                if (themeIcon) { themeIcon.classList.replace('bi-moon-stars-fill', 'bi-sun-fill'); }
+                if (themeText) { themeText.textContent = 'Mode Clair'; }
+            } else {
+                if (themeIcon) { themeIcon.classList.replace('bi-sun-fill', 'bi-moon-stars-fill'); }
+                if (themeText) { themeText.textContent = 'Mode Sombre'; }
+            }
+        };
+
+        const savedTheme = localStorage.getItem('theme_preference') || 'dark';
         htmlElement.setAttribute('data-bs-theme', savedTheme);
-        updateThemeUI(savedTheme, themeIcon, themeText);
-    });
+        updateThemeUI(savedTheme);
 
-    // Toggle theme on button click
-    document.getElementById('themeToggle').addEventListener('click', function(e) {
-        e.preventDefault();
-        const htmlElement = document.documentElement;
-        const currentTheme = htmlElement.getAttribute('data-bs-theme') || 'dark';
-        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-
-        // Update DOM
-        htmlElement.setAttribute('data-bs-theme', newTheme);
-
-        // Persist preference
-        localStorage.setItem('theme_preference', newTheme);
-
-        // Update UI
-        const themeIcon = this.querySelector('i');
-        const themeText = this.querySelector('.nav-text');
-        updateThemeUI(newTheme, themeIcon, themeText);
-    });
-
-    // Helper function to update theme UI
-    function updateThemeUI(theme, icon, text) {
-        if (theme === 'light') {
-            icon.classList.remove('bi-moon-stars-fill');
-            icon.classList.add('bi-sun-fill');
-            if (text) text.textContent = 'Mode Clair';
-        } else {
-            icon.classList.remove('bi-sun-fill');
-            icon.classList.add('bi-moon-stars-fill');
-            if (text) text.textContent = 'Mode Sombre';
+        if (themeToggle) {
+            themeToggle.addEventListener('click', function(e) {
+                e.preventDefault();
+                const currentTheme = htmlElement.getAttribute('data-bs-theme');
+                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                htmlElement.setAttribute('data-bs-theme', newTheme);
+                localStorage.setItem('theme_preference', newTheme);
+                updateThemeUI(newTheme);
+            });
         }
-    }
 
-    // Sidebar toggle functionality
-    const toggleBtn = document.getElementById('sidebarToggle');
-    const sidebar = document.getElementById('sidebar');
+        // --- Sidebar Logic ---
+        const toggleBtn = document.getElementById('sidebarToggle');
+        const sidebar = document.getElementById('sidebar');
 
-    toggleBtn.addEventListener('click', () => {
-        sidebar.classList.toggle('collapsed');
-        const isCollapsed = sidebar.classList.contains('collapsed');
-        document.cookie = `sidebar_hidden=${isCollapsed ? 'true' : 'false'}; path=/; max-age=31536000`;
+        if (toggleBtn && sidebar) {
+            toggleBtn.addEventListener('click', () => {
+                sidebar.classList.toggle('collapsed');
+                const isCollapsed = sidebar.classList.contains('collapsed');
+                document.cookie = `sidebar_hidden=${isCollapsed ? 'true' : 'false'}; path=/; max-age=31536000`;
+            });
+        }
+
+        // --- Profile Upload Logic ---
+        const profilePicTrigger = document.getElementById('profilePicTrigger');
+        const profilePicInput = document.getElementById('profilePicInput');
+        const sidebarProfilePic = document.getElementById('sidebarProfilePic');
+
+        if (profilePicTrigger && profilePicInput) {
+            profilePicTrigger.addEventListener('click', () => profilePicInput.click());
+
+            profilePicInput.addEventListener('change', async function() {
+                if (this.files && this.files[0]) {
+                    const formData = new FormData();
+                    formData.append('profile_pic', this.files[0]);
+
+                    try {
+                        const response = await fetch('upload_profile.php', {
+                            method: 'POST',
+                            body: formData
+                        });
+                        const result = await response.json();
+
+                        if (result.success) {
+                            const newUrl = result.url + '?t=' + new Date().getTime();
+                            
+                            // Update sidebar
+                            if (sidebarProfilePic) {
+                                sidebarProfilePic.src = newUrl;
+                                sidebarProfilePic.classList.add('profile-updated');
+                                setTimeout(() => sidebarProfilePic.classList.remove('profile-updated'), 600);
+                            }
+                            
+                            // Update ALL profile images on the page (matching current user's name or ID)
+                            // For simplicity, we'll update images with the 'user-profile-pic' class
+                            document.querySelectorAll('.user-profile-pic').forEach(img => {
+                                // If we're on the home page, the trip cards show the driver's pic.
+                                // If the logged in user is the driver, we update it.
+                                // We can use a data attribute on the card to check the user_id.
+                                const card = img.closest('.apple-card');
+                                const currentUserId = '<?= $_SESSION["user_id"] ?? "" ?>';
+                                
+                                if (card && card.dataset.userId === currentUserId) {
+                                    img.src = newUrl;
+                                    img.classList.remove('d-none');
+                                    img.classList.add('profile-updated');
+                                    
+                                    // Hide placeholder if it exists
+                                    const placeholder = card.querySelector('.profile-placeholder');
+                                    if (placeholder) placeholder.classList.add('d-none');
+                                    
+                                    setTimeout(() => img.classList.remove('profile-updated'), 600);
+                                }
+                            });
+                        } else {
+                            alert('Erreur: ' + result.message);
+                        }
+                    } catch (error) {
+                        console.error('Error:', error);
+                    }
+                }
+            });
+        }
     });
 </script>

@@ -3,7 +3,7 @@ include "header.php";
 include "db.php";
 $trips = $pdo
     ->query(
-        "SELECT T.*, U.name, U.phone FROM Trips T JOIN Users U ON T.user_id = U.id WHERE T.seats > 0 LIMIT 6",
+        "SELECT T.*, U.id as user_id, U.name, U.phone, U.profile_pic FROM Trips T JOIN Users U ON T.user_id = U.id WHERE T.seats > 0 LIMIT 6",
     )
     ->fetchAll();
 ?>
@@ -23,11 +23,24 @@ $trips = $pdo
         <?php foreach ($trips as $t): ?>
         <div class="col-xl-4 col-md-6">
             <!-- apple-card now uses Material 3 expressive rounded corners[cite: 2] -->
-            <div class="apple-card h-100 shadow-sm">
+            <div class="apple-card h-100 shadow-sm" 
+                 role="button"
+                 data-trip-id="<?= $t["id"] ?>"
+                 data-user-id="<?= $t["user_id"] ?>"
+                 data-driver="<?= htmlspecialchars($t["name"]) ?>"
+                 data-price="<?= $t["price"] ?>"
+                 data-departure="<?= htmlspecialchars($t["departure"]) ?>"
+                 data-destination="<?= htmlspecialchars($t["destination"]) ?>"
+                 data-time="<?= date("H:i", strtotime($t["date_trip"])) ?>"
+                 data-phone="<?= htmlspecialchars($t["phone"]) ?>"
+                 data-profile-pic="<?= $t["profile_pic"] ?>">
                 <div class="d-flex justify-content-between align-items-start mb-4">
                     <div class="d-flex align-items-center">
-                        <div class="bg-primary bg-opacity-10 p-2 rounded-3 me-3" style="width:48px; height:48px; display:flex; align-items:center; justify-content:center;">
-                            <i class="bi bi-car-front-fill text-primary fs-4"></i>
+                        <div class="me-3 position-relative" style="width:48px; height:48px;">
+                            <img src="<?= $t["profile_pic"] ?? "" ?>" alt="Profile" class="rounded-3 shadow-sm user-profile-pic <?= $t["profile_pic"] ? "" : "d-none" ?>" style="width:100%; height:100%; object-fit:cover;">
+                            <div class="profile-placeholder bg-primary bg-opacity-10 p-2 rounded-3 d-flex align-items-center justify-content-center h-100 w-100 <?= $t["profile_pic"] ? "d-none" : "" ?>">
+                                <i class="bi bi-car-front-fill text-primary fs-4"></i>
+                            </div>
                         </div>
                         <div>
                             <div class="fw-bold"><?= htmlspecialchars(

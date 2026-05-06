@@ -4,7 +4,7 @@ $trips = [];
 if (isset($_GET["q"])) {
     $q = "%" . $_GET["q"] . "%";
     $stmt = $pdo->prepare(
-        "SELECT * FROM Trips WHERE (departure LIKE ? OR destination LIKE ?) AND seats > 0",
+        "SELECT T.*, U.id as user_id, U.name, U.phone, U.profile_pic FROM Trips T JOIN Users U ON T.user_id = U.id WHERE (T.departure LIKE ? OR T.destination LIKE ?) AND T.seats > 0",
     );
     $stmt->execute([$q, $q]);
     $trips = $stmt->fetchAll();
@@ -21,7 +21,28 @@ if (isset($_GET["q"])) {
 <div class="row g-4">
     <?php foreach ($trips as $t): ?>
     <div class="col-md-4">
-        <div class="apple-card p-4">
+        <div class="apple-card p-4" 
+             role="button"
+             data-trip-id="<?= $t["id"] ?>"
+             data-user-id="<?= $t["user_id"] ?>"
+             data-driver="<?= htmlspecialchars($t["name"]) ?>"
+             data-price="<?= $t["price"] ?>"
+             data-departure="<?= htmlspecialchars($t["departure"]) ?>"
+             data-destination="<?= htmlspecialchars($t["destination"]) ?>"
+             data-time="<?= date("H:i", strtotime($t["date_trip"])) ?>"
+             data-phone="<?= htmlspecialchars($t["phone"]) ?>"
+             data-profile-pic="<?= $t["profile_pic"] ?>">
+            
+            <div class="d-flex align-items-center mb-3">
+                <div class="me-2 position-relative" style="width:32px; height:32px;">
+                    <img src="<?= $t["profile_pic"] ?? "" ?>" alt="Profile" class="rounded-circle user-profile-pic <?= $t["profile_pic"] ? "" : "d-none" ?>" style="width:100%; height:100%; object-fit:cover;">
+                    <div class="profile-placeholder bg-primary bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center h-100 w-100 <?= $t["profile_pic"] ? "d-none" : "" ?>">
+                        <i class="bi bi-person-fill text-primary small"></i>
+                    </div>
+                </div>
+                <div class="small fw-bold text-muted"><?= htmlspecialchars($t["name"]) ?></div>
+            </div>
+
             <h4 class="fw-bold mb-1"><?= htmlspecialchars(
                 $t["departure"],
             ) ?> → <?= htmlspecialchars($t["destination"]) ?></h4>
