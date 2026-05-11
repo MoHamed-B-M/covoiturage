@@ -53,7 +53,10 @@ include "header.php";
 
         <form method="POST">
             <input type="email" name="email" class="form-control mb-3" placeholder="Email" required>
-            <input type="password" name="password" class="form-control mb-4" placeholder="Mot de passe" required>
+            <input type="password" name="password" class="form-control mb-2" placeholder="Mot de passe" required>
+            <div class="text-end mb-4">
+                <a href="forgot_password.php" class="text-decoration-none small text-secondary">Mot de passe oublié ?</a>
+            </div>
             <button class="btn btn-apple w-100 py-2">Se connecter</button>
         </form>
     </div>
