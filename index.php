@@ -27,7 +27,7 @@ $trips = $pdo
             </p>
             <div class="flex flex-wrap items-center justify-center lg:justify-start gap-4">
                 <a href="#explore" class="bg-cyber-gradient text-white px-8 py-4 rounded-2xl font-black text-sm uppercase shadow-glow-purple hover:scale-105 transition-transform">Get Started</a>
-                <a href="search.php" class="px-8 py-4 rounded-2xl border border-slate-700 font-black text-sm uppercase hover:bg-slate-800 transition-colors">How it works</a>
+                <button onclick="toggleTutorial()" class="px-8 py-4 rounded-2xl border border-slate-700 font-black text-sm uppercase hover:bg-slate-800 transition-colors">How it works</button>
             </div>
         </div>
 
@@ -68,30 +68,36 @@ $trips = $pdo
     </div>
 
     <!-- Floating Glass Search Bar -->
-    <div class="w-full max-w-4xl mt-16 z-20">
-        <form action="search.php" method="GET" class="glass p-3 rounded-[32px] flex flex-col md:flex-row items-center gap-2 border border-white/10 shadow-2xl backdrop-blur-3xl">
-            <div class="flex-1 flex items-center px-8 gap-4 border-r border-white/5 last:border-0 w-full md:w-auto">
-                <i class="bi bi-geo-alt-fill text-mint text-xl"></i>
-                <div class="flex flex-col text-left">
-                    <label class="text-[9px] uppercase font-black text-slate-500 tracking-[0.2em]">Origin</label>
-                    <input type="text" name="departure" placeholder="Where from?" class="bg-transparent border-0 p-0 text-sm font-bold text-white focus:ring-0 placeholder-slate-600 w-full" required>
+    <div class="w-full max-w-5xl mt-16 z-20">
+        <form action="search.php" method="GET" class="glass p-4 rounded-[40px] flex flex-col md:flex-row items-center gap-4 border border-white/10 shadow-2xl backdrop-blur-3xl">
+            <!-- Origin -->
+            <div class="flex-1 premium-input-group w-full md:w-auto relative">
+                <div class="absolute left-5 top-1/2 -translate-y-1/2 text-slate-500 transition-colors group-focus-within:text-indigo-brand">
+                    <i class="bi bi-geo-alt-fill"></i>
                 </div>
+                <input type="text" name="departure" id="departure" placeholder=" " class="premium-input h-16 w-full rounded-2xl pl-12 pr-6 pt-5 text-sm font-bold text-white transition-all bg-transparent focus:ring-0" required>
+                <label for="departure" class="floating-label absolute left-12 top-5 text-sm font-bold text-slate-500 uppercase tracking-widest">Origin</label>
             </div>
-            <div class="flex-1 flex items-center px-8 gap-4 border-r border-white/5 last:border-0 w-full md:w-auto">
-                <i class="bi bi-cursor-fill text-cyber text-xl"></i>
-                <div class="flex flex-col text-left">
-                    <label class="text-[9px] uppercase font-black text-slate-500 tracking-[0.2em]">Destiny</label>
-                    <input type="text" name="destination" placeholder="Where to?" class="bg-transparent border-0 p-0 text-sm font-bold text-white focus:ring-0 placeholder-slate-600 w-full" required>
+            
+            <!-- Destiny -->
+            <div class="flex-1 premium-input-group w-full md:w-auto relative">
+                <div class="absolute left-5 top-1/2 -translate-y-1/2 text-slate-500 transition-colors group-focus-within:text-indigo-brand">
+                    <i class="bi bi-cursor-fill"></i>
                 </div>
+                <input type="text" name="destination" id="destination" placeholder=" " class="premium-input h-16 w-full rounded-2xl pl-12 pr-6 pt-5 text-sm font-bold text-white transition-all bg-transparent focus:ring-0" required>
+                <label for="destination" class="floating-label absolute left-12 top-5 text-sm font-bold text-slate-500 uppercase tracking-widest">Destiny</label>
             </div>
-            <div class="flex-1 flex items-center px-8 gap-4 border-r border-white/5 last:border-0 w-full md:w-auto">
-                <i class="bi bi-calendar2-week-fill text-mint text-xl"></i>
-                <div class="flex flex-col text-left">
-                    <label class="text-[9px] uppercase font-black text-slate-500 tracking-[0.2em]">Launch</label>
-                    <input type="date" name="date" value="<?= date('Y-m-d') ?>" class="bg-transparent border-0 p-0 text-sm font-bold text-white focus:ring-0 w-full [color-scheme:dark]">
+
+            <!-- Launch -->
+            <div class="flex-1 premium-input-group w-full md:w-auto relative">
+                <div class="absolute left-5 top-1/2 -translate-y-1/2 text-slate-500 transition-colors group-focus-within:text-indigo-brand">
+                    <i class="bi bi-calendar2-week-fill"></i>
                 </div>
+                <input type="date" name="date" id="date" value="<?= date('Y-m-d') ?>" class="premium-input h-16 w-full rounded-2xl pl-12 pr-6 pt-5 text-sm font-bold text-white transition-all [color-scheme:dark] bg-transparent focus:ring-0">
+                <label for="date" class="floating-label absolute left-12 top-5 text-[10px] font-bold text-slate-500 uppercase tracking-widest -translate-y-3 scale-75">Launch</label>
             </div>
-            <button type="submit" class="w-full md:w-auto bg-mint text-midnight px-10 py-5 rounded-[24px] font-black text-xs uppercase shadow-glow-mint hover:scale-[1.02] active:scale-95 transition-all">
+
+            <button type="submit" class="w-full md:w-auto bg-mint text-midnight px-12 py-5 rounded-[24px] font-black text-xs uppercase shadow-glow-mint hover:scale-[1.02] active:scale-95 transition-all">
                 Execute
             </button>
         </form>

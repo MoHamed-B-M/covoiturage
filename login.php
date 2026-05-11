@@ -1,11 +1,9 @@
 <?php
-// 1. Database and Session must be handled BEFORE any HTML output[cite: 12, 13]
 include "db.php";
 session_start();
 
-// Redirect if already logged in (Optional but recommended)
 if (isset($_SESSION["user_id"])) {
-    header("Location: dashboard.php");
+    header("Location: index.php");
     exit();
 }
 
@@ -30,34 +28,67 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($user && password_verify($_POST["password"], $user["password"])) {
         $_SESSION["user_id"] = $user["id"];
         $_SESSION["user_name"] = $user["name"];
-
-        // 2. header() only works if no HTML has been sent to the browser yet
-        header("Location: dashboard.php");
-        exit(); // Always exit after a redirect
+        header("Location: index.php");
+        exit();
     } else {
-        $error = "Identifiants invalides";
+        $error = "Access Denied: Invalid Credentials";
     }
 }
 
-// 3. Now include the visual header after the logic[cite: 12]
 include "header.php";
 ?>
 
-<div class="row justify-content-center">
-    <div class="col-md-4 apple-card p-5 mt-5">
-        <h2 class="fw-bold text-center mb-4">Connexion</h2>
+<div class="flex items-center justify-center min-h-[80vh]">
+    <div class="glass max-w-md w-full rounded-[40px] p-10 md:p-12 shadow-2xl border border-white/10 relative overflow-hidden">
+        <!-- Decorative Glow -->
+        <div class="absolute -top-20 -right-20 w-48 h-48 bg-cyber/10 rounded-full filter blur-[60px]"></div>
+        
+        <div class="text-center mb-10">
+            <div class="w-16 h-16 bg-cyber-gradient rounded-2xl flex items-center justify-center text-white mx-auto mb-6 shadow-glow-purple">
+                <i class="bi bi-shield-lock-fill text-3xl"></i>
+            </div>
+            <h2 class="text-3xl font-black tracking-tighter uppercase">Authorized Entry</h2>
+            <p class="text-slate-500 text-sm mt-2 uppercase tracking-widest font-bold">Secure Login Protocol</p>
+        </div>
 
         <?php if (isset($error)): ?>
-            <div class="alert alert-danger small"><?= $error ?></div>
+            <div class="bg-red-500/10 border border-red-500/20 text-red-400 px-4 py-3 rounded-xl text-xs font-bold uppercase tracking-wider mb-8 text-center animate-pulse">
+                <?= $error ?>
+            </div>
         <?php endif; ?>
 
-        <form method="POST">
-            <input type="email" name="email" class="form-control mb-3" placeholder="Email" required>
-            <input type="password" name="password" class="form-control mb-2" placeholder="Mot de passe" required>
-            <div class="text-end mb-4">
-                <a href="forgot_password.php" class="text-decoration-none small text-secondary">Mot de passe oublié ?</a>
+        <form method="POST" class="space-y-6">
+            <!-- Email -->
+            <div class="premium-input-group relative">
+                <div class="absolute left-5 top-1/2 -translate-y-1/2 text-slate-500 transition-colors group-focus-within:text-cyber">
+                    <i class="bi bi-envelope-at-fill"></i>
+                </div>
+                <input type="email" name="email" id="email" placeholder=" " class="premium-input h-16 w-full rounded-2xl pl-12 pr-6 pt-5 text-sm font-bold text-white transition-all bg-transparent focus:ring-0" required>
+                <label for="email" class="floating-label absolute left-12 top-5 text-sm font-bold text-slate-500 uppercase tracking-widest">Email Address</label>
             </div>
-            <button class="btn btn-apple w-100 py-2">Se connecter</button>
+
+            <!-- Password -->
+            <div class="premium-input-group relative">
+                <div class="absolute left-5 top-1/2 -translate-y-1/2 text-slate-500 transition-colors group-focus-within:text-cyber">
+                    <i class="bi bi-key-fill"></i>
+                </div>
+                <input type="password" name="password" id="password" placeholder=" " class="premium-input h-16 w-full rounded-2xl pl-12 pr-6 pt-5 text-sm font-bold text-white transition-all bg-transparent focus:ring-0" required>
+                <label for="password" class="floating-label absolute left-12 top-5 text-sm font-bold text-slate-500 uppercase tracking-widest">Access Key</label>
+                
+                <div class="text-right mt-2">
+                    <a href="forgot_password.php" class="text-[10px] font-black uppercase text-slate-500 hover:text-cyber transition-colors tracking-widest">Forgot Password?</a>
+                </div>
+            </div>
+
+            <button type="submit" class="w-full bg-cyber-gradient text-white py-4 rounded-2xl font-black uppercase text-sm shadow-glow-purple hover:scale-[1.02] active:scale-95 transition-all">
+                Initiate Login
+            </button>
+            
+            <div class="text-center pt-6">
+                <p class="text-slate-500 text-xs font-bold uppercase tracking-widest">
+                    New Agent? <a href="register.php" class="text-mint hover:underline">Request Recruitment</a>
+                </p>
+            </div>
         </form>
     </div>
 </div>
