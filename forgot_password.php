@@ -99,23 +99,46 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 }
 ?>
 
-<div class="row justify-content-center">
-    <div class="col-md-5 apple-card p-5 mt-5 fade-in">
-        <h2 class="fw-bold text-center mb-2">Mot de passe oublié</h2>
-        <p class="text-secondary text-center mb-4 small">Entrez votre email pour recevoir un lien de réinitialisation.</p>
+<div class="flex items-center justify-center min-h-[80vh]">
+    <div class="glass max-w-md w-full rounded-[40px] p-10 md:p-12 shadow-2xl border border-white/10 relative overflow-hidden">
+        <div class="absolute -top-20 -right-20 w-48 h-48 bg-mint/10 rounded-full filter blur-[60px]"></div>
+
+        <div class="text-center mb-10">
+            <div class="w-16 h-16 bg-gradient-to-br from-mint to-teal-600 rounded-2xl flex items-center justify-center text-midnight mx-auto mb-6 shadow-glow-mint">
+                <i class="ph ph-envelope-open text-3xl"></i>
+            </div>
+            <h2 class="text-3xl font-black tracking-tighter uppercase">Mot de passe oublié</h2>
+            <p class="text-slate-500 text-sm mt-2 uppercase tracking-widest font-bold">Entrez votre email pour recevoir un lien de réinitialisation.</p>
+        </div>
 
         <?php if ($message): ?>
-            <div class="alert <?= $messageClass ?> small fade-in"><?= $message ?></div>
+            <?php
+                $msgType = 'red';
+                if (strpos($messageClass, 'success') !== false) $msgType = 'emerald';
+                elseif (strpos($messageClass, 'warning') !== false) $msgType = 'amber';
+            ?>
+            <div class="bg-<?= $msgType ?>-500/10 border border-<?= $msgType ?>-500/20 text-<?= $msgType ?>-400 px-4 py-3 rounded-xl text-xs font-bold uppercase tracking-wider mb-8 text-center animate-pulse">
+                <?= $message ?>
+            </div>
         <?php endif; ?>
 
-        <form method="POST">
-            <div class="mb-4">
-                <label class="form-label">Adresse Email</label>
-                <input type="email" name="email" class="form-control" placeholder="exemple@mail.com" required>
+        <form method="POST" class="space-y-6">
+            <div class="premium-input-group relative">
+                <div class="absolute left-5 top-1/2 -translate-y-1/2 text-slate-500 transition-colors group-focus-within:text-mint">
+                    <i class="ph ph-envelope-simple"></i>
+                </div>
+                <input type="email" name="email" id="email" placeholder=" " class="premium-input h-16 w-full rounded-2xl pl-12 pr-6 pt-5 text-sm font-bold text-white transition-all bg-transparent focus:ring-0" required>
+                <label for="email" class="floating-label absolute left-12 top-5 text-sm font-bold text-slate-500 uppercase tracking-widest">Adresse Email</label>
             </div>
-            <button class="btn btn-apple w-100 py-2 mb-3">Envoyer le lien</button>
-            <div class="text-center">
-                <a href="login.php" class="text-decoration-none small text-secondary">Retour à la connexion</a>
+
+            <button type="submit" class="w-full bg-gradient-to-r from-mint to-teal-600 text-midnight py-4 rounded-2xl font-black uppercase text-sm shadow-glow-mint hover:scale-[1.02] active:scale-95 transition-all">
+                Envoyer le lien
+            </button>
+
+            <div class="text-center pt-6">
+                <a href="login.php" class="text-slate-500 text-xs font-bold uppercase tracking-widest hover:text-white transition-colors">
+                    <i class="ph ph-arrow-left me-1"></i> Retour à la connexion
+                </a>
             </div>
         </form>
     </div>

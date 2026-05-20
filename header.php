@@ -15,6 +15,9 @@ if (session_status() === PHP_SESSION_NONE) {
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -176,19 +179,45 @@ if (session_status() === PHP_SESSION_NONE) {
     </script>
 
     <!-- Navbar -->
-    <nav class="glass sticky top-0 z-50 px-8 py-5 flex items-center justify-between mx-4 my-4 rounded-2xl">
-        <a href="index.php" class="flex items-center gap-3">
-            <div class="w-10 h-10 bg-cyber-gradient rounded-xl flex items-center justify-center text-white shadow-glow-purple">
-                <i class="bi bi-lightning-charge-fill text-xl"></i>
-            </div>
-            <span class="text-2xl font-extrabold tracking-tighter uppercase">Rydo</span>
+    <nav class="glass sticky top-0 z-50 px-8 py-3 flex items-center justify-between mx-4 my-4 rounded-2xl">
+        <a href="index.php" class="flex items-center group">
+            <svg class="h-10 md:h-12 w-auto transition-transform duration-500 group-hover:scale-105" viewBox="0 0 180 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="logoGrad" x1="0" y1="0" x2="1" y2="1">
+                        <stop offset="0%" stop-color="#2DD4BF"/>
+                        <stop offset="100%" stop-color="#0D9488"/>
+                    </linearGradient>
+                </defs>
+                <rect x="2" y="6" width="12" height="36" rx="3" fill="url(#logoGrad)" opacity="0.4"/>
+                <rect x="8" y="2" width="12" height="44" rx="3" fill="url(#logoGrad)" opacity="0.7"/>
+                <rect x="14" y="6" width="12" height="36" rx="3" fill="url(#logoGrad)"/>
+                <path d="M38 14 L45 34 L52 14" stroke="url(#logoGrad)" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                <path d="M42 24 L48 24" stroke="url(#logoGrad)" stroke-width="3" stroke-linecap="round"/>
+                <path d="M62 14 L62 34" stroke="url(#logoGrad)" stroke-width="4" stroke-linecap="round"/>
+                <path d="M62 14 C62 14 70 18 72 24 C74 30 62 34 62 34" stroke="url(#logoGrad)" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+                <text x="86" y="32" font-family="'Plus Jakarta Sans', sans-serif" font-weight="800" font-size="28" fill="white" letter-spacing="1">Rydo</text>
+            </svg>
         </a>
 
         <div class="hidden md:flex items-center gap-10 font-bold text-sm uppercase tracking-widest text-slate-400">
-            <a href="index.php" class="hover:text-mint transition-colors">Home</a>
-            <a href="search.php" class="hover:text-mint transition-colors">Explorer</a>
+            <?php 
+                $current_page = basename($_SERVER['PHP_SELF']); 
+            ?>
+            <a href="index.php" class="hover:text-mint transition-colors <?= $current_page == 'index.php' ? 'text-mint' : '' ?>">Home</a>
+            <a href="search.php" class="hover:text-mint transition-colors <?= $current_page == 'search.php' ? 'text-mint' : '' ?>">Explorer</a>
+            
+            <?php if (isset($_SESSION["role"]) && $_SESSION["role"] === "admin"): ?>
+                <a href="admin_dashboard.php" class="relative group flex items-center gap-2 transition-all <?= $current_page == 'admin_dashboard.php' ? 'text-cyber' : 'hover:text-cyber' ?>">
+                    <i class="ph ph-shield-check text-lg"></i>
+                    <span>Admin</span>
+                    <?php if ($current_page == 'admin_dashboard.php'): ?>
+                        <span class="absolute -bottom-2 left-0 w-full h-0.5 bg-cyber shadow-[0_0_10px_rgba(168,85,247,0.5)]"></span>
+                    <?php endif; ?>
+                </a>
+            <?php endif; ?>
+
             <?php if (isset($_SESSION["user_id"])): ?>
-                <a href="add_trip.php" class="hover:text-mint transition-colors">Publier</a>
+                <a href="add_trip.php" class="hover:text-mint transition-colors <?= $current_page == 'add_trip.php' ? 'text-mint' : '' ?>">Publier</a>
             <?php endif; ?>
         </div>
 
