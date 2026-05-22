@@ -120,9 +120,218 @@ if (session_status() === PHP_SESSION_NONE) {
             transform: scale(0.9) translateY(20px);
             opacity: 0;
         }
+
+        /* Intro Overlay */
+        #intro-overlay {
+            transition: opacity 0.8s ease, visibility 0.8s ease;
+        }
+        #intro-overlay.fade-out {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+        #intro-start-btn {
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        #intro-start-btn:hover {
+            transform: scale(1.08);
+            box-shadow: 0 0 40px rgba(45, 212, 191, 0.4);
+        }
+        #intro-start-btn.hidden {
+            opacity: 0;
+            transform: scale(0.8);
+            pointer-events: none;
+        }
+        #intro-loader {
+            transition: opacity 0.5s ease;
+        }
+        #intro-loader.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* Truck Loader (from Uiverse.io by vinodjangid07) */
+        .loader {
+            width: fit-content;
+            height: fit-content;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .truckWrapper {
+            width: 200px;
+            height: 100px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            align-items: center;
+            justify-content: flex-end;
+            overflow-x: hidden;
+        }
+        .truckBody {
+            width: 130px;
+            height: fit-content;
+            margin-bottom: 6px;
+            animation: motion 1s linear infinite;
+        }
+        @keyframes motion {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(3px); }
+            100% { transform: translateY(0px); }
+        }
+        .truckTires {
+            width: 130px;
+            height: fit-content;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0px 10px 0px 15px;
+            position: absolute;
+            bottom: 0;
+        }
+        .truckTires svg { width: 24px; }
+        .road {
+            width: 100%;
+            height: 1.5px;
+            background-color: #282828;
+            position: relative;
+            bottom: 0;
+            align-self: flex-end;
+            border-radius: 3px;
+        }
+        .road::before {
+            content: "";
+            position: absolute;
+            width: 20px;
+            height: 100%;
+            background-color: #282828;
+            right: -50%;
+            border-radius: 3px;
+            animation: roadAnimation 1.4s linear infinite;
+            border-left: 10px solid white;
+        }
+        .road::after {
+            content: "";
+            position: absolute;
+            width: 10px;
+            height: 100%;
+            background-color: #282828;
+            right: -65%;
+            border-radius: 3px;
+            animation: roadAnimation 1.4s linear infinite;
+            border-left: 4px solid white;
+        }
+        .lampPost {
+            position: absolute;
+            bottom: 0;
+            right: -90%;
+            height: 90px;
+            animation: roadAnimation 1.4s linear infinite;
+        }
+        @keyframes roadAnimation {
+            0% { transform: translateX(0px); }
+            100% { transform: translateX(-350px); }
+        }
     </style>
 </head>
 <body class="antialiased selection:bg-mint/30">
+
+    <!-- Intro Overlay -->
+    <script>if(localStorage.getItem('rydo_intro_seen')){var _s=document.createElement('style');_s.textContent='#intro-overlay{display:none!important}';document.head.appendChild(_s)}</script>
+    <div id="intro-overlay" class="fixed inset-0 z-[200] flex flex-col items-center justify-center bg-midnight">
+        <div class="text-center" id="intro-start">
+            <svg class="h-24 md:h-32 w-auto mx-auto mb-8" viewBox="0 0 180 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="logoGradIntro" x1="0" y1="0" x2="1" y2="1">
+                        <stop offset="0%" stop-color="#2DD4BF"/>
+                        <stop offset="100%" stop-color="#0D9488"/>
+                    </linearGradient>
+                </defs>
+                <rect x="2" y="6" width="12" height="36" rx="3" fill="url(#logoGradIntro)" opacity="0.4"/>
+                <rect x="8" y="2" width="12" height="44" rx="3" fill="url(#logoGradIntro)" opacity="0.7"/>
+                <rect x="14" y="6" width="12" height="36" rx="3" fill="url(#logoGradIntro)"/>
+                <path d="M38 14 L45 34 L52 14" stroke="url(#logoGradIntro)" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                <path d="M42 24 L48 24" stroke="url(#logoGradIntro)" stroke-width="3" stroke-linecap="round"/>
+                <path d="M62 14 L62 34" stroke="url(#logoGradIntro)" stroke-width="4" stroke-linecap="round"/>
+                <path d="M62 14 C62 14 70 18 72 24 C74 30 62 34 62 34" stroke="url(#logoGradIntro)" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+                <text x="86" y="32" font-family="'Plus Jakarta Sans', sans-serif" font-weight="800" font-size="28" fill="white" letter-spacing="1">Rydo</text>
+            </svg>
+            <p class="text-slate-500 text-sm uppercase tracking-[0.3em] font-bold mb-12">Connect the dots. Share the ride.</p>
+            <button id="intro-start-btn" class="bg-gradient-to-r from-mint to-teal-600 text-midnight px-12 py-5 rounded-2xl font-black uppercase text-sm shadow-glow-mint cursor-pointer">
+                <i class="ph ph-play-circle me-2"></i> Press to Start
+            </button>
+        </div>
+        <div id="intro-loader" class="hidden absolute inset-0 flex flex-col items-center justify-center">
+            <div class="loader">
+                <div class="truckWrapper">
+                    <div class="truckBody">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 198 93" class="trucksvg">
+                            <path stroke-width="3" stroke="#282828" fill="#F83D3D" d="M135 22.5H177.264C178.295 22.5 179.22 23.133 179.594 24.0939L192.33 56.8443C192.442 57.1332 192.5 57.4404 192.5 57.7504V89C192.5 90.3807 191.381 91.5 190 91.5H135C133.619 91.5 132.5 90.3807 132.5 89V25C132.5 23.6193 133.619 22.5 135 22.5Z"></path>
+                            <path stroke-width="3" stroke="#282828" fill="#7D7C7C" d="M146 33.5H181.741C182.779 33.5 183.709 34.1415 184.078 35.112L190.538 52.112C191.16 53.748 189.951 55.5 188.201 55.5H146C144.619 55.5 143.5 54.3807 143.5 53V36C143.5 34.6193 144.619 33.5 146 33.5Z"></path>
+                            <path stroke-width="2" stroke="#282828" fill="#282828" d="M150 65C150 65.39 149.763 65.8656 149.127 66.2893C148.499 66.7083 147.573 67 146.5 67C145.427 67 144.501 66.7083 143.873 66.2893C143.237 65.8656 143 65.39 143 65C143 64.61 143.237 64.1344 143.873 63.7107C144.501 63.2917 145.427 63 146.5 63C147.573 63 148.499 63.2917 149.127 63.7107C149.763 64.1344 150 64.61 150 65Z"></path>
+                            <rect stroke-width="2" stroke="#282828" fill="#FFFCAB" rx="1" height="7" width="5" y="63" x="187"></rect>
+                            <rect stroke-width="2" stroke="#282828" fill="#282828" rx="1" height="11" width="4" y="81" x="193"></rect>
+                            <rect stroke-width="3" stroke="#282828" fill="#DFDFDF" rx="2.5" height="90" width="121" y="1.5" x="6.5"></rect>
+                            <rect stroke-width="2" stroke="#282828" fill="#DFDFDF" rx="2" height="4" width="6" y="84" x="1"></rect>
+                        </svg>
+                    </div>
+                    <div class="truckTires">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 30 30" class="tiresvg">
+                            <circle stroke-width="3" stroke="#282828" fill="#282828" r="13.5" cy="15" cx="15"></circle>
+                            <circle fill="#DFDFDF" r="7" cy="15" cx="15"></circle>
+                        </svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 30 30" class="tiresvg">
+                            <circle stroke-width="3" stroke="#282828" fill="#282828" r="13.5" cy="15" cx="15"></circle>
+                            <circle fill="#DFDFDF" r="7" cy="15" cx="15"></circle>
+                        </svg>
+                    </div>
+                    <div class="road"></div>
+                    <svg xml:space="preserve" viewBox="0 0 453.459 453.459" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" id="Capa_1" version="1.1" fill="#000000" class="lampPost">
+                        <path d="M252.882,0c-37.781,0-68.686,29.953-70.245,67.358h-6.917v8.954c-26.109,2.163-45.463,10.011-45.463,19.366h9.993c-1.65,5.146-2.507,10.54-2.507,16.017c0,28.956,23.558,52.514,52.514,52.514c28.956,0,52.514-23.558,52.514-52.514c0-5.478-0.856-10.872-2.506-16.017h9.992c0-9.354-19.352-17.204-45.463-19.366v-8.954h-6.149C200.189,38.779,223.924,16,252.882,16c29.952,0,54.32,24.368,54.32,54.32c0,28.774-11.078,37.009-25.105,47.437c-17.444,12.968-37.216,27.667-37.216,78.884v113.914h-0.797c-5.068,0-9.174,4.108-9.174,9.177c0,2.844,1.293,5.383,3.321,7.066c-3.432,27.933-26.851,95.744-8.226,115.459v11.202h45.75v-11.202c18.625-19.715-4.794-87.527-8.227-115.459c2.029-1.683,3.322-4.223,3.322-7.066c0-5.068-4.107-9.177-9.176-9.177h-0.795V196.641c0-43.174,14.942-54.283,30.762-66.043c14.793-10.997,31.559-23.461,31.559-60.277C323.202,31.545,291.656,0,252.882,0z M232.77,111.694c0,23.442-19.071,42.514-42.514,42.514c-23.442,0-42.514-19.072-42.514-42.514c0-5.531,1.078-10.957,3.141-16.017h78.747C231.693,100.736,232.77,106.162,232.77,111.694z"></path>
+                    </svg>
+                </div>
+            </div>
+            <p class="text-slate-500 text-xs uppercase tracking-[0.3em] font-bold mt-8 animate-pulse">Chargement...</p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const overlay = document.getElementById('intro-overlay');
+            const startBtn = document.getElementById('intro-start-btn');
+            const startSection = document.getElementById('intro-start');
+            const loader = document.getElementById('intro-loader');
+
+            if (localStorage.getItem('rydo_intro_seen')) {
+                return;
+            }
+
+            startBtn.addEventListener('click', function() {
+                localStorage.setItem('rydo_intro_seen', '1');
+                startSection.style.display = 'none';
+                loader.classList.remove('hidden');
+
+                const startTime = Date.now();
+                const minDuration = 3000;
+
+                function finishIntro() {
+                    const elapsed = Date.now() - startTime;
+                    const remaining = Math.max(0, minDuration - elapsed);
+
+                    setTimeout(function() {
+                        overlay.classList.add('fade-out');
+                        document.body.style.overflow = '';
+                    }, remaining);
+                }
+
+                window.addEventListener('load', finishIntro);
+                if (document.readyState === 'complete') {
+                    window.removeEventListener('load', finishIntro);
+                    finishIntro();
+                }
+            });
+        });
+    </script>
 
     <!-- Tutorial Modal Overlay -->
     <div id="tutorial-modal" class="fixed inset-0 z-[100] flex items-center justify-center p-4 modal-hidden">
@@ -217,6 +426,7 @@ if (session_status() === PHP_SESSION_NONE) {
             <?php endif; ?>
 
             <?php if (isset($_SESSION["user_id"])): ?>
+                <a href="my_bookings.php" class="hover:text-mint transition-colors <?= $current_page == 'my_bookings.php' ? 'text-mint' : '' ?>">Mes Réservations</a>
                 <a href="add_trip.php" class="hover:text-mint transition-colors <?= $current_page == 'add_trip.php' ? 'text-mint' : '' ?>">Publier</a>
             <?php endif; ?>
         </div>

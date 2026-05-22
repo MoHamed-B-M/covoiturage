@@ -463,9 +463,15 @@ $trips = $pdo
                     <span class="text-[10px] font-black text-slate-500 uppercase tracking-widest">Véhicule</span>
                     <p id="p-car" class="text-white font-bold text-lg"></p>
                 </div>
-                <div class="space-y-1">
-                    <span class="text-[10px] font-black text-slate-500 uppercase tracking-widest">Plaque d'immatriculation</span>
-                    <p class="text-white font-bold text-lg">TN 216 • 4829</p>
+                <div class="space-y-2">
+                    <span class="text-[10px] font-black text-slate-500 uppercase tracking-widest block">Plaque d'immatriculation</span>
+                    <div class="flex">
+                        <div class="inline-flex items-center gap-2.5 px-3.5 py-1 bg-neutral-950 border border-white/10 rounded-xl font-mono text-base text-white shadow-[inset_0_2px_4px_rgba(0,0,0,0.8)] select-none">
+                            <span class="font-extrabold text-white">216</span>
+                            <span class="text-[10px] text-rose-500 font-extrabold px-1.5 py-0.5 bg-rose-950/30 border border-rose-500/20 rounded font-sans select-none">تونس</span>
+                            <span class="font-extrabold text-white">4829</span>
+                        </div>
+                    </div>
                 </div>
             </div>
 
